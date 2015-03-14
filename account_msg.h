@@ -27,14 +27,17 @@ public:
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strPhone);
 		return 0;
 	}
 
 	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhone);
-		return 0;
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhone);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+		return nRet;
 	}
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
@@ -54,23 +57,44 @@ public:
 	}
 
 	uint8_t			m_nResult;
+	string			m_strTips;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
-		return 0;
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+		if(m_nResult != 0)
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strTips);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+		return nRet;
 	}
 
 	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nResult);
 		return 0;
 	}
 
-	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
 	{
-		uint32_t nLen = sprintf(buf, ", msgbody={m_nResult=%d}\n", m_nResult);
-		offset += nLen;
+		uint32_t nLen = sprintf(pBuf, ", msgbody={m_nResult=%d\n", m_nResult);
+		nOffset += nLen;
+
+		if(m_nResult != 0)
+		{
+			nLen = sprintf(pBuf, ", m_strTips=%s", m_strTips.c_str());
+			nOffset += nLen;
+		}
+
+		nLen = sprintf(pBuf, "}\n");
+		nOffset += nLen;
 	}
 };
 
