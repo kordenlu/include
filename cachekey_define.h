@@ -8,9 +8,7 @@
 #ifndef CACHEKEY_DEFINE_H_
 #define CACHEKEY_DEFINE_H_
 
-
-#define RDSKEY_CHANNEL_CLIENT_REQ				"client_req_queue"
-#define RDSKEY_CHANNEL_CLIENT_RESP				"client_resp_queue"
+#define RK_REGIST_PHONE_INFO			"regist_phone_info_"
 
 
 #endif /* CACHEKEY_DEFINE_H_ */
