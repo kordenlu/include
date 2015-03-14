@@ -18,5 +18,6 @@ struct ConnInfo
 };
 
 #define MAX_MSG_SIZE		(64 * 1024 - 1)
+#define MAX_CTLHEAD_SIZE	(255)
 
 #endif /* TYPEDEF_H_ */
