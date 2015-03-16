@@ -17,6 +17,11 @@ struct ConnInfo
 	uint32_t			m_nUin;
 };
 
+enum
+{
+	enmMaxInternetAddrLen		= 128,
+};
+
 #define MAX_MSG_SIZE		(64 * 1024 - 1)
 #define MAX_CTLHEAD_SIZE	(255)
 
