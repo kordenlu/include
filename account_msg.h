@@ -42,7 +42,7 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf, ", msgbody={m_strPhone=%s}\n", m_strPhone.c_str());
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strPhone=%s}", m_strPhone.c_str());
 		offset += nLen;
 	}
 };
@@ -62,7 +62,7 @@ public:
 		enmResult_PhoneAuthLimit	= 0x01,
 		enmResult_AccountExist		= 0x02,
 		enmResult_AddrAuthLimit		= 0x03,
-		enmResult_Unknown			= 0x04,
+		enmResult_Unknown			= 0xff,
 	};
 
 	uint8_t			m_nResult;
@@ -93,16 +93,16 @@ public:
 
 	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
 	{
-		uint32_t nLen = sprintf(pBuf, ", msgbody={m_nResult=%d\n", m_nResult);
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_nResult=%d", m_nResult);
 		nOffset += nLen;
 
 		if(m_nResult != 0)
 		{
-			nLen = sprintf(pBuf, ", m_strTips=%s", m_strTips.c_str());
+			nLen = sprintf(pBuf + nOffset, ", m_strTips=%s", m_strTips.c_str());
 			nOffset += nLen;
 		}
 
-		nLen = sprintf(pBuf, "}\n");
+		nLen = sprintf(pBuf + nOffset, "}");
 		nOffset += nLen;
 	}
 };
@@ -149,7 +149,7 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf, ", msgbody={m_strPhone=%s, m_strPassword=%s, m_nAuthCode=%d}\n",
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strPhone=%s, m_strPassword=%s, m_nAuthCode=%d}",
 				m_strPhone.c_str(), m_strPassword.c_str(), m_nAuthCode);
 		offset += nLen;
 	}
@@ -170,7 +170,7 @@ public:
 		enmResult_OK				= 0x00,
 		enmResult_AuthCodeWrong		= 0x01,
 		enmResult_AuthCodeExpire	= 0x02,
-		enmResult_Unknown			= 0x04,
+		enmResult_Unknown			= 0xff,
 	};
 
 	uint8_t			m_nResult;
@@ -211,21 +211,21 @@ public:
 
 	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
 	{
-		uint32_t nLen = sprintf(pBuf, ", msgbody={m_nResult=%d\n", m_nResult);
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_nResult=%d", m_nResult);
 		nOffset += nLen;
 
 		if(m_nResult != 0)
 		{
-			nLen = sprintf(pBuf, ", m_strTips=%s", m_strTips.c_str());
+			nLen = sprintf(pBuf + nOffset, ", m_strTips=%s", m_strTips.c_str());
 			nOffset += nLen;
 		}
 		else
 		{
-			nLen = sprintf(pBuf, ", m_nUin=%u", m_nUin);
+			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u", m_nUin);
 			nOffset += nLen;
 		}
 
-		nLen = sprintf(pBuf, "}\n");
+		nLen = sprintf(pBuf + nOffset, "}");
 		nOffset += nLen;
 	}
 };
@@ -237,11 +237,11 @@ class CRegistBaseInfoReq : public IMsgBody
 public:
 	CRegistBaseInfoReq()
 	{
-		m_nSex = 0;
+		m_nGender = 0;
 	}
 
 	string			m_strHeadImageAddr;
-	uint8_t			m_nSex;
+	uint8_t			m_nGender;
 	string			m_strNickName;
 	string			m_strBirthday;
 
@@ -258,7 +258,7 @@ public:
 			return nRet;
 		}
 
-		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nSex);
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nGender);
 		if(nRet != 0)
 		{
 			return nRet;
@@ -280,8 +280,8 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf, ", msgbody={m_strHeadImageAddr=%s, m_nSex=%d, m_strNickName=%s, m_strBirthday=%s}\n",
-				m_strHeadImageAddr.c_str(), m_nSex, m_strNickName.c_str(), m_strBirthday.c_str());
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strHeadImageAddr=%s, m_nGender=%d, m_strNickName=%s, m_strBirthday=%s}",
+				m_strHeadImageAddr.c_str(), m_nGender, m_strNickName.c_str(), m_strBirthday.c_str());
 		offset += nLen;
 	}
 };
@@ -299,7 +299,7 @@ public:
 	{
 		enmResult_OK				= 0x00,
 		enmResult_RegistInfoWrong	= 0x01,
-		enmResult_Unknown			= 0x04,
+		enmResult_Unknown			= 0xff,
 	};
 
 	uint8_t			m_nResult;
@@ -331,16 +331,197 @@ public:
 
 	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
 	{
-		uint32_t nLen = sprintf(pBuf, ", msgbody={m_nResult=%d\n", m_nResult);
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_nResult=%d", m_nResult);
 		nOffset += nLen;
 
 		if(m_nResult != 0)
 		{
-			nLen = sprintf(pBuf, ", m_strTips=%s", m_strTips.c_str());
+			nLen = sprintf(pBuf + nOffset, ", m_strTips=%s", m_strTips.c_str());
 			nOffset += nLen;
 		}
 
-		nLen = sprintf(pBuf, "}\n");
+		nLen = sprintf(pBuf + nOffset, "}");
+		nOffset += nLen;
+	}
+};
+
+#define MSGID_USERLOGIN_REQ		10
+class CUserLoginReq : public IMsgBody
+{
+public:
+	CUserLoginReq()
+	{
+	}
+
+	string			m_strAccountName;
+	string			m_strPassword;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strAccountName);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPassword);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+		return nRet;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strAccountName=%s, m_strPassword=%s}",
+				m_strAccountName.c_str(), m_strPassword.c_str());
+		offset += nLen;
+	}
+};
+
+#define MSGID_USERLOGIN_RESP		11
+class CUserLoginResp : public IMsgBody
+{
+public:
+	CUserLoginResp()
+	{
+		m_nResult = 0;
+		m_nUin = 0;
+		m_nGender = 0;
+		m_nCarePeopleCount = 0;
+		m_nFansCount = 0;
+		m_nFriendsCount = 0;
+		m_nMyTopicCount = 0;
+		m_nJoinTopicCount = 0;
+	}
+
+	enum
+	{
+		enmResult_OK				= 0x00,
+		enmResult_LoginWrong		= 0x01,
+		enmResult_AccountLocked		= 0x02,
+		enmResult_NotExist			= 0x03,
+		enmResult_Unknown			= 0xff,
+	};
+
+	uint8_t			m_nResult;
+	string			m_strTips;
+	uint32_t		m_nUin;
+	string			m_strNickName;
+	uint8_t			m_nGender;
+	string			m_strHeadImageAddr;
+	uint16_t		m_nCarePeopleCount;
+	uint16_t		m_nFansCount;
+	uint16_t		m_nFriendsCount;
+	uint16_t		m_nMyTopicCount;
+	uint16_t		m_nJoinTopicCount;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		if(m_nResult != 0)
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strTips);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+		else
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nUin);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strNickName);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nGender);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strHeadImageAddr);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nCarePeopleCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFansCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFriendsCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nMyTopicCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nJoinTopicCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+		return nRet;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
+	{
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_nResult=%d", m_nResult);
+		nOffset += nLen;
+
+		if(m_nResult != 0)
+		{
+			nLen = sprintf(pBuf + nOffset, ", m_strTips=%s", m_strTips.c_str());
+			nOffset += nLen;
+		}
+		else
+		{
+			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s, m_nCarePeopleCount=%d, "
+					"m_nFansCount=%d, m_nFriendsCount=%d, m_nMyTopicCount=%d, m_nJoinTopicCount=%d",
+					m_nUin, m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nCarePeopleCount, m_nFansCount,
+					m_nFriendsCount, m_nMyTopicCount, m_nJoinTopicCount);
+			nOffset += nLen;
+		}
+
+		nLen = sprintf(pBuf + nOffset, "}");
 		nOffset += nLen;
 	}
 };

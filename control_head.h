@@ -83,8 +83,8 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf, "controlhead={m_nTotalSize=%d, m_nHeadSize=%d, m_nControlCode=%d, m_nIdentifyType=%d, m_nUin=%u, "
-				"m_nSessionID=%u, m_nClientAddress=%s, m_nClientPort=%d}\n", m_nTotalSize, m_nHeadSize, m_nControlCode,
+		uint32_t nLen = sprintf(buf + offset, "controlhead={m_nTotalSize=%d, m_nHeadSize=%d, m_nControlCode=%d, m_nIdentifyType=%d, m_nUin=%u, "
+				"m_nSessionID=%u, m_nClientAddress=%s, m_nClientPort=%d}", m_nTotalSize, m_nHeadSize, m_nControlCode,
 				m_nIdentifyType, m_nUin, m_nSessionID, inet_ntoa_f(m_nClientAddress), m_nClientPort);
 		offset += nLen;
 	}

@@ -47,7 +47,7 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf, "msgheadcs={m_nTotalSize=%d, m_nMsgID=%d, m_nSeq=%u, m_nSrcUin=%u, m_nDstUin=%u}\n",
+		uint32_t nLen = sprintf(buf + offset, "msgheadcs={m_nTotalSize=%d, m_nMsgID=%d, m_nSeq=%u, m_nSrcUin=%u, m_nDstUin=%u}",
 				m_nTotalSize, m_nMsgID, m_nSeq, m_nSrcUin, m_nDstUin);
 		offset += nLen;
 	}
