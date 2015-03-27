@@ -107,7 +107,6 @@ public:
 	{
 		strcpy(version, "version");
 		strcpy(accountname, "accountname");
-		strcpy(accountid, "accountid");
 		strcpy(uin, "uin");
 		strcpy(oneselfwords, "oneselfwords");
 		strcpy(school, "school");
@@ -122,7 +121,7 @@ public:
 		strcpy(gender, "gender");
 		strcpy(headimage, "headimage");
 		strcpy(createtime, "createtime");
-		strcpy(brithday, "brithday");
+		strcpy(birthday, "birthday");
 		strcpy(age, "age");
 		strcpy(care_people_count, "care_people_count");
 		strcpy(fans_count, "fans_count");
@@ -140,7 +139,6 @@ public:
 	char string[MAX_FIELD_SIZE];
 	char version[MAX_FIELD_SIZE];
 	char accountname[MAX_FIELD_SIZE];
-	char accountid[MAX_FIELD_SIZE];
 	char uin[MAX_FIELD_SIZE];
 	char nickname[MAX_FIELD_SIZE];
 	char oneselfwords[MAX_FIELD_SIZE];
@@ -154,7 +152,7 @@ public:
 	char gender[MAX_FIELD_SIZE];
 	char headimage[MAX_FIELD_SIZE];
 	char createtime[MAX_FIELD_SIZE];
-	char brithday[MAX_FIELD_SIZE];
+	char birthday[MAX_FIELD_SIZE];
 	char age[MAX_FIELD_SIZE];
 	char care_people_count[MAX_FIELD_SIZE];
 	char fans_count[MAX_FIELD_SIZE];
@@ -177,6 +175,7 @@ public:
 		strcpy(string, "account_info_");
 		strcpy(accountname, "accountname");
 		strcpy(uin, "uin");
+		strcpy(accountid, "accountid");
 		strcpy(password, "password");
 		strcpy(status, "status");
 		return 0;
@@ -189,6 +188,7 @@ public:
 	char string[MAX_FIELD_SIZE];
 	char accountname[MAX_FIELD_SIZE];
 	char uin[MAX_FIELD_SIZE];
+	char accountid[MAX_FIELD_SIZE];
 	char password[MAX_FIELD_SIZE];
 	char status[MAX_FIELD_SIZE];
 };

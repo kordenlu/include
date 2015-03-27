@@ -175,7 +175,8 @@ public:
 
 	uint8_t			m_nResult;
 	string			m_strTips;
-	uint32_t		m_nUin;
+	uint32_t			m_nUin;
+	string			m_strAccountID;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -196,6 +197,12 @@ public:
 		else
 		{
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nUin);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strAccountID);
 			if(nRet != 0)
 			{
 				return nRet;
@@ -221,7 +228,7 @@ public:
 		}
 		else
 		{
-			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u", m_nUin);
+			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s", m_nUin, m_strAccountID.c_str());
 			nOffset += nLen;
 		}
 
@@ -394,11 +401,7 @@ public:
 		m_nResult = 0;
 		m_nUin = 0;
 		m_nGender = 0;
-		m_nCarePeopleCount = 0;
-		m_nFansCount = 0;
-		m_nFriendsCount = 0;
-		m_nMyTopicCount = 0;
-		m_nJoinTopicCount = 0;
+		m_nSelfInfoVersion = 0;
 	}
 
 	enum
@@ -409,18 +412,14 @@ public:
 		enmResult_NotExist			= 0x03,
 		enmResult_Unknown			= 0xff,
 	};
-
 	uint8_t			m_nResult;
 	string			m_strTips;
-	uint32_t		m_nUin;
+	uint32_t			m_nUin;
+	string			m_strAccountID;
 	string			m_strNickName;
 	uint8_t			m_nGender;
 	string			m_strHeadImageAddr;
-	uint16_t		m_nCarePeopleCount;
-	uint16_t		m_nFansCount;
-	uint16_t		m_nFriendsCount;
-	uint16_t		m_nMyTopicCount;
-	uint16_t		m_nJoinTopicCount;
+	uint32_t			m_nSelfInfoVersion;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -446,6 +445,12 @@ public:
 				return nRet;
 			}
 
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strAccountID);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strNickName);
 			if(nRet != 0)
 			{
@@ -464,31 +469,7 @@ public:
 				return nRet;
 			}
 
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nCarePeopleCount);
-			if(nRet != 0)
-			{
-				return nRet;
-			}
-
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFansCount);
-			if(nRet != 0)
-			{
-				return nRet;
-			}
-
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFriendsCount);
-			if(nRet != 0)
-			{
-				return nRet;
-			}
-
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nMyTopicCount);
-			if(nRet != 0)
-			{
-				return nRet;
-			}
-
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nJoinTopicCount);
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nSelfInfoVersion);
 			if(nRet != 0)
 			{
 				return nRet;
@@ -514,10 +495,9 @@ public:
 		}
 		else
 		{
-			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s, m_nCarePeopleCount=%d, "
-					"m_nFansCount=%d, m_nFriendsCount=%d, m_nMyTopicCount=%d, m_nJoinTopicCount=%d",
-					m_nUin, m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nCarePeopleCount, m_nFansCount,
-					m_nFriendsCount, m_nMyTopicCount, m_nJoinTopicCount);
+			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s, "
+					"m_nSelfInfoVersion=%u",
+					m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nSelfInfoVersion);
 			nOffset += nLen;
 		}
 
