@@ -228,7 +228,6 @@ public:
 	{
 	}
 
-	string			m_strCityName;
 	string			m_strBusLineID;
 	string			m_strStationName;
 
@@ -239,13 +238,7 @@ public:
 
 	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strCityName);
-		if(nRet != 0)
-		{
-			return nRet;
-		}
-
-		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strBusLineID);
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strBusLineID);
 		if(nRet != 0)
 		{
 			return nRet;
@@ -262,8 +255,8 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strCityName=%s, m_strBusLineID=%s, m_strStationName=%s}",
-				m_strCityName.c_str(), m_strBusLineID.c_str(), m_strStationName.c_str());
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strBusLineID=%s, m_strStationName=%s}",
+				m_strBusLineID.c_str(), m_strStationName.c_str());
 		offset += nLen;
 	}
 };
@@ -289,11 +282,13 @@ public:
 		UserSimpleInfo()
 		{
 			m_nUin = 0;
+			m_nAge = 0;
 			m_nGender = 0;
 		}
 
 		uint32_t				m_nUin;
 		string				m_strNickName;
+		uint8_t				m_nAge;
 		uint8_t				m_nGender;
 		string				m_strHeadImageAddr;
 		string				m_strOneselfWords;
@@ -308,8 +303,6 @@ public:
 
 	uint8_t					m_nResult;
 	string					m_strTips;
-	string					m_strStartStation;
-	string					m_strEndStation;
 	string					m_strPrevStation;
 	string					m_strNextStation;
 	uint16_t					m_nUserCount;
@@ -335,18 +328,6 @@ public:
 		}
 		else
 		{
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strStartStation);
-			if(nRet != 0)
-			{
-				return nRet;
-			}
-
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strEndStation);
-			if(nRet != 0)
-			{
-				return nRet;
-			}
-
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strPrevStation);
 			if(nRet != 0)
 			{
@@ -382,12 +363,17 @@ public:
 				{
 					return nRet;
 				}
-				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrUserSimpleInfo[i].m_strHeadImageAddr);
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrUserSimpleInfo[i].m_nGender);
 				if(nRet != 0)
 				{
 					return nRet;
 				}
-				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrUserSimpleInfo[i].m_nGender);
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrUserSimpleInfo[i].m_nAge);
+				if(nRet != 0)
+				{
+					return nRet;
+				}
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrUserSimpleInfo[i].m_strHeadImageAddr);
 				if(nRet != 0)
 				{
 					return nRet;
@@ -422,12 +408,17 @@ public:
 				{
 					return nRet;
 				}
-				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrNearUserSimpleInfo[i].m_strHeadImageAddr);
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrNearUserSimpleInfo[i].m_nGender);
 				if(nRet != 0)
 				{
 					return nRet;
 				}
-				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrNearUserSimpleInfo[i].m_nGender);
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrNearUserSimpleInfo[i].m_nAge);
+				if(nRet != 0)
+				{
+					return nRet;
+				}
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrNearUserSimpleInfo[i].m_strHeadImageAddr);
 				if(nRet != 0)
 				{
 					return nRet;
@@ -460,16 +451,16 @@ public:
 		}
 		else
 		{
-			nLen = sprintf(buf + offset, ", m_strStartStation=%s, m_strEndStation=%s, m_strPrevStation=%s, m_strNextStation=%s, "
-					"m_nUserCount=%d, usersimpleinfo={",
-					m_strStartStation.c_str(), m_strEndStation.c_str(), m_strPrevStation.c_str(), m_strNextStation.c_str(), m_nUserCount);
+			nLen = sprintf(buf + offset, ", m_strPrevStation=%s, m_strNextStation=%s, m_nUserCount=%d, usersimpleinfo={",
+					m_strPrevStation.c_str(), m_strNextStation.c_str(), m_nUserCount);
 			offset += nLen;
 
 			for(int32_t i = 0; i < m_nUserCount; ++i)
 			{
-				nLen = sprintf(buf + offset, "[index=%d]{m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s,"
+				nLen = sprintf(buf + offset, "[index=%d]{m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_nAge=%d, m_strHeadImageAddr=%s, "
 						"m_strOneselfWords=%s}, ", i, m_arrUserSimpleInfo[i].m_nUin, m_arrUserSimpleInfo[i].m_strNickName.c_str(),
-						m_arrUserSimpleInfo[i].m_nGender, m_arrUserSimpleInfo[i].m_strHeadImageAddr.c_str(), m_arrUserSimpleInfo[i].m_strOneselfWords.c_str());
+						m_arrUserSimpleInfo[i].m_nGender, m_arrUserSimpleInfo[i].m_nAge, m_arrUserSimpleInfo[i].m_strHeadImageAddr.c_str(),
+						m_arrUserSimpleInfo[i].m_strOneselfWords.c_str());
 				offset += nLen;
 			}
 
@@ -478,9 +469,10 @@ public:
 
 			for(int32_t i = 0; i < m_nUserCount; ++i)
 			{
-				nLen = sprintf(buf + offset, "[index=%d]{m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s,"
+				nLen = sprintf(buf + offset, "[index=%d]{m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_nAge=%d, m_strHeadImageAddr=%s,"
 						"m_strOneselfWords=%s}, ", i, m_arrUserSimpleInfo[i].m_nUin, m_arrUserSimpleInfo[i].m_strNickName.c_str(),
-						m_arrUserSimpleInfo[i].m_nGender, m_arrUserSimpleInfo[i].m_strHeadImageAddr.c_str(), m_arrUserSimpleInfo[i].m_strOneselfWords.c_str());
+						m_arrUserSimpleInfo[i].m_nGender, m_arrUserSimpleInfo[i].m_nAge, m_arrUserSimpleInfo[i].m_strHeadImageAddr.c_str(),
+						m_arrUserSimpleInfo[i].m_strOneselfWords.c_str());
 				offset += nLen;
 			}
 
