@@ -13,7 +13,7 @@ using namespace FRAME;
 
 #define MAX_FIELD_SIZE		256
 
-#define REGIST_PHONE_INFO	"regist_phone_info_"
+#define REGIST_PHONEINFO	"regist.phoneinfo."
 class RegistPhoneInfo : public IConfig
 {
 public:
@@ -43,7 +43,7 @@ public:
 	char auth_code_expire_time[MAX_FIELD_SIZE];
 };
 
-#define REGIST_ADDR_INFO		"regist_addr_info_"
+#define REGIST_ADDRINFO		"regist.addrinfo."
 class RegistAddrInfo : public IConfig
 {
 public:
@@ -69,7 +69,7 @@ public:
 	char last_regist_date[MAX_FIELD_SIZE];
 };
 
-#define GLOBAL_UIN		"gobal_uin"
+#define GLOBAL_UIN		"gobal.uin"
 class GlobalUin : public IConfig
 {
 public:
@@ -93,7 +93,7 @@ public:
 	char uin[MAX_FIELD_SIZE];
 };
 
-#define USER_BASE_INFO		"user_base_info_"
+#define USER_BASEINFO		"user.baseinfo."
 class UserBaseInfo : public IConfig
 {
 public:
@@ -126,7 +126,7 @@ public:
 		strcpy(care_people_count, "care_people_count");
 		strcpy(fans_count, "fans_count");
 		strcpy(friends_count, "friends_count");
-		strcpy(mytopic_count, "mytopic_count");
+		strcpy(publishtopic_count, "publishtopic_count");
 		strcpy(jointopic_count, "jointopic_count");
 		return 0;
 	}
@@ -157,11 +157,11 @@ public:
 	char care_people_count[MAX_FIELD_SIZE];
 	char fans_count[MAX_FIELD_SIZE];
 	char friends_count[MAX_FIELD_SIZE];
-	char mytopic_count[MAX_FIELD_SIZE];
+	char publishtopic_count[MAX_FIELD_SIZE];
 	char jointopic_count[MAX_FIELD_SIZE];
 };
 
-#define ACCOUNT_INFO			"account_info_"
+#define ACCOUNT_INFO			"account.info."
 class AccountInfo : public IConfig
 {
 public:
@@ -172,7 +172,6 @@ public:
 	//初始化配置
 	virtual int32_t Init()
 	{
-		strcpy(string, "account_info_");
 		strcpy(accountname, "accountname");
 		strcpy(uin, "uin");
 		strcpy(accountid, "accountid");
@@ -192,5 +191,126 @@ public:
 	char password[MAX_FIELD_SIZE];
 	char status[MAX_FIELD_SIZE];
 };
+
+#define USER_BLACKLIST			"user.blacklist."
+class UserBlackList : public IConfig
+{
+public:
+	UserBlackList(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+};
+
+#define USER_SESSIONINFO			"user.sessioninfo."
+class UserSessionInfo : public IConfig
+{
+public:
+	UserSessionInfo(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		strcpy(clientaddress, "clientaddress");
+		strcpy(clientport, "clientport");
+		strcpy(serverid, "serverid");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+	char clientaddress[MAX_FIELD_SIZE];
+	char clientport[MAX_FIELD_SIZE];
+	char serverid[MAX_FIELD_SIZE];
+};
+
+#define USER_UNREADMSGLIST			"user.unreadmsglist."
+class UserUnreadMsgList : public IConfig
+{
+public:
+	UserUnreadMsgList(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		strcpy(timestamp, "timestamp");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+	char timestamp[MAX_FIELD_SIZE];
+};
+
+#define UNHANDLE_USER_LIST		"unhandle.userlist"
+class UnhandleUserList : public IConfig
+{
+public:
+	UnhandleUserList(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+	char string[MAX_FIELD_SIZE];
+};
+
+
+#define USER_UNREAD_LOCK		"user.unread.lock."
+class UserUnreadLock : public IConfig
+{
+public:
+	UserUnreadLock(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+	char string[MAX_FIELD_SIZE];
+};
+
 
 #endif /* CACHEKEY_DEFINE_H_ */
