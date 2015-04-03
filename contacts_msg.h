@@ -209,6 +209,7 @@ public:
 	{
 		m_nResult = 0;
 		m_nVersion = 0;
+		m_nAge = 0;
 		m_nCarePeopleCount = 0;
 		m_nFansCount = 0;
 		m_nFriendsCount = 0;
@@ -222,7 +223,8 @@ public:
 	string					m_strOneselfWords;
 	string					m_strSchool;
 	string					m_strHometown;
-	string					m_strAge;
+	string					m_strBirthday;
+	uint8_t					m_nAge;
 	string					m_strLivePlace;
 	string					m_strHeight;
 	string					m_strWeight;
@@ -267,7 +269,13 @@ public:
 				return nRet;
 			}
 
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strAge);
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strBirthday);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nAge);
 			if(nRet != 0)
 			{
 				return nRet;
@@ -357,10 +365,10 @@ public:
 		else if(m_nResult == enmResult_OK)
 		{
 			nLen = sprintf(buf + offset, ", m_nVersion=%u, m_strOneselfWords=%s, m_strSchool=%s, m_strHometown=%s, "
-					"m_strAge=%s, m_strLivePlace=%s, m_strHeight=%s, m_strWeight=%s, m_strJob=%s, m_nCarePeopleCount=%u, "
+					"m_strBirthday=%s, m_nAge=%d, m_strLivePlace=%s, m_strHeight=%s, m_strWeight=%s, m_strJob=%s, m_nCarePeopleCount=%u, "
 					"m_nFansCount=%u, m_nFriendsCount=%u, m_nPublishTopicCount=%u, m_nJoinTopicCount=%u",
-					m_nVersion, m_strOneselfWords.c_str(), m_strSchool.c_str(), m_strHometown.c_str(), m_strAge.c_str(),
-					m_strLivePlace.c_str(), m_strHeight.c_str(), m_strWeight.c_str(), m_strJob.c_str(), m_nCarePeopleCount,
+					m_nVersion, m_strOneselfWords.c_str(), m_strSchool.c_str(), m_strHometown.c_str(), m_strBirthday.c_str(),
+					m_nAge, m_strLivePlace.c_str(), m_strHeight.c_str(), m_strWeight.c_str(), m_strJob.c_str(), m_nCarePeopleCount,
 					m_nFansCount, m_nFriendsCount, m_nPublishTopicCount, m_nJoinTopicCount);
 			offset += nLen;
 		}
