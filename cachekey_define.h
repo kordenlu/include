@@ -13,7 +13,7 @@ using namespace FRAME;
 
 #define MAX_FIELD_SIZE		256
 
-#define REGIST_PHONEINFO	"regist.phoneinfo."
+#define REGIST_PHONEINFO	"regist:phoneinfo:"
 class RegistPhoneInfo : public IConfig
 {
 public:
@@ -43,7 +43,7 @@ public:
 	char auth_code_expire_time[MAX_FIELD_SIZE];
 };
 
-#define REGIST_ADDRINFO		"regist.addrinfo."
+#define REGIST_ADDRINFO		"regist:addrinfo:"
 class RegistAddrInfo : public IConfig
 {
 public:
@@ -69,7 +69,7 @@ public:
 	char last_regist_date[MAX_FIELD_SIZE];
 };
 
-#define GLOBAL_UIN		"gobal.uin"
+#define GLOBAL_UIN		"gobal:uin"
 class GlobalUin : public IConfig
 {
 public:
@@ -93,7 +93,7 @@ public:
 	char uin[MAX_FIELD_SIZE];
 };
 
-#define USER_BASEINFO		"user.baseinfo."
+#define USER_BASEINFO		"user:baseinfo:"
 class UserBaseInfo : public IConfig
 {
 public:
@@ -161,7 +161,7 @@ public:
 	char jointopic_count[MAX_FIELD_SIZE];
 };
 
-#define ACCOUNT_INFO			"account.info."
+#define ACCOUNT_INFO			"accountinfo:"
 class AccountInfo : public IConfig
 {
 public:
@@ -192,7 +192,7 @@ public:
 	char status[MAX_FIELD_SIZE];
 };
 
-#define USER_BLACKLIST			"user.blacklist."
+#define USER_BLACKLIST			"user:blacklist:"
 class UserBlackList : public IConfig
 {
 public:
@@ -215,7 +215,7 @@ public:
 	char uin[MAX_FIELD_SIZE];
 };
 
-#define USER_SESSIONINFO			"user.sessioninfo."
+#define USER_SESSIONINFO			"user:sessioninfo:"
 class UserSessionInfo : public IConfig
 {
 public:
@@ -226,10 +226,10 @@ public:
 	//初始化配置
 	virtual int32_t Init()
 	{
-		strcpy(uin, "uin");
+		strcpy(sessionid, "sessionid");
 		strcpy(clientaddress, "clientaddress");
 		strcpy(clientport, "clientport");
-		strcpy(serverid, "serverid");
+		strcpy(gateid, "gateid");
 		return 0;
 	}
 	//卸载配置
@@ -238,13 +238,13 @@ public:
 		return 0;
 	}
 	char string[MAX_FIELD_SIZE];
-	char uin[MAX_FIELD_SIZE];
+	char sessionid[MAX_FIELD_SIZE];
 	char clientaddress[MAX_FIELD_SIZE];
 	char clientport[MAX_FIELD_SIZE];
-	char serverid[MAX_FIELD_SIZE];
+	char gateid[MAX_FIELD_SIZE];
 };
 
-#define USER_UNREADMSGLIST			"user.unreadmsglist."
+#define USER_UNREADMSGLIST			"user:unreadmsglist:"
 class UserUnreadMsgList : public IConfig
 {
 public:
@@ -255,8 +255,8 @@ public:
 	//初始化配置
 	virtual int32_t Init()
 	{
-		strcpy(uin, "uin");
 		strcpy(timestamp, "timestamp");
+		strcpy(unreadmsg, "unreadmsg");
 		return 0;
 	}
 	//卸载配置
@@ -265,11 +265,11 @@ public:
 		return 0;
 	}
 	char string[MAX_FIELD_SIZE];
-	char uin[MAX_FIELD_SIZE];
 	char timestamp[MAX_FIELD_SIZE];
+	char unreadmsg[MAX_FIELD_SIZE];
 };
 
-#define UNHANDLE_USER_LIST		"unhandle.userlist"
+#define UNHANDLE_USER_LIST		"unhandle:userlist"
 class UnhandleUserList : public IConfig
 {
 public:
@@ -291,7 +291,7 @@ public:
 };
 
 
-#define USER_UNREAD_LOCK		"user.unread.lock."
+#define USER_UNREAD_LOCK		"user:unread:lock:"
 class UserUnreadLock : public IConfig
 {
 public:
