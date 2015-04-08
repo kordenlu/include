@@ -86,11 +86,13 @@ public:
 		m_nMsgSize = 0;
 	}
 
-	enum SyncFlag
+	enum
 	{
 		enmSyncFlag_Sync		= 0x00,
 		enmSyncFlag_Fin		= 0x01,
 	};
+
+	typedef uint8_t SyncFlag;
 
 	SyncFlag				m_nSyncFlag;
 	uint32_t				m_nSyncSeq;

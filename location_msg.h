@@ -226,10 +226,14 @@ public:
 
 	CGetStationUserListReq()
 	{
+		m_nPos = 0;
+		m_nReqCount = 0;
 	}
 
 	string			m_strBusLineID;
 	string			m_strStationName;
+	uint16_t			m_nPos;
+	uint8_t			m_nReqCount;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -250,13 +254,25 @@ public:
 			return nRet;
 		}
 
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nPos);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nReqCount);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
 		return nRet;
 	}
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strBusLineID=%s, m_strStationName=%s}",
-				m_strBusLineID.c_str(), m_strStationName.c_str());
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strBusLineID=%s, m_strStationName=%s, m_nPos=%d, m_nReqCount=%d}",
+				m_strBusLineID.c_str(), m_strStationName.c_str(), m_nPos, m_nReqCount);
 		offset += nLen;
 	}
 };
@@ -284,6 +300,7 @@ public:
 			m_nUin = 0;
 			m_nAge = 0;
 			m_nGender = 0;
+			m_nDistance = 0;
 		}
 
 		uint32_t				m_nUin;
@@ -292,6 +309,7 @@ public:
 		uint8_t				m_nGender;
 		string				m_strHeadImageAddr;
 		string				m_strOneselfWords;
+		int32_t				m_nDistance;
 	};
 
 	CGetStationUserListResp()
@@ -383,6 +401,11 @@ public:
 				{
 					return nRet;
 				}
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrUserSimpleInfo[i].m_nDistance);
+				if(nRet != 0)
+				{
+					return nRet;
+				}
 			}
 
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nNearUserCount);
@@ -428,6 +451,11 @@ public:
 				{
 					return nRet;
 				}
+				nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrNearUserSimpleInfo[i].m_nDistance);
+				if(nRet != 0)
+				{
+					return nRet;
+				}
 			}
 		}
 
@@ -458,21 +486,21 @@ public:
 			for(int32_t i = 0; i < m_nUserCount; ++i)
 			{
 				nLen = sprintf(buf + offset, "[index=%d]{m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_nAge=%d, m_strHeadImageAddr=%s, "
-						"m_strOneselfWords=%s}, ", i, m_arrUserSimpleInfo[i].m_nUin, m_arrUserSimpleInfo[i].m_strNickName.c_str(),
+						"m_strOneselfWords=%s, m_nDistance=%d}, ", i, m_arrUserSimpleInfo[i].m_nUin, m_arrUserSimpleInfo[i].m_strNickName.c_str(),
 						m_arrUserSimpleInfo[i].m_nGender, m_arrUserSimpleInfo[i].m_nAge, m_arrUserSimpleInfo[i].m_strHeadImageAddr.c_str(),
-						m_arrUserSimpleInfo[i].m_strOneselfWords.c_str());
+						m_arrUserSimpleInfo[i].m_strOneselfWords.c_str(), m_arrUserSimpleInfo[i].m_nDistance);
 				offset += nLen;
 			}
 
 			nLen = sprintf(buf + offset, "}, m_nNearUserCount=%d, nearusersimpleinfo={", m_nNearUserCount);
 			offset += nLen;
 
-			for(int32_t i = 0; i < m_nUserCount; ++i)
+			for(int32_t i = 0; i < m_nNearUserCount; ++i)
 			{
 				nLen = sprintf(buf + offset, "[index=%d]{m_nUin=%u, m_strNickName=%s, m_nGender=%d, m_nAge=%d, m_strHeadImageAddr=%s,"
-						"m_strOneselfWords=%s}, ", i, m_arrUserSimpleInfo[i].m_nUin, m_arrUserSimpleInfo[i].m_strNickName.c_str(),
-						m_arrUserSimpleInfo[i].m_nGender, m_arrUserSimpleInfo[i].m_nAge, m_arrUserSimpleInfo[i].m_strHeadImageAddr.c_str(),
-						m_arrUserSimpleInfo[i].m_strOneselfWords.c_str());
+						"m_strOneselfWords=%s, m_nDistance=%d}, ", i, m_arrNearUserSimpleInfo[i].m_nUin, m_arrNearUserSimpleInfo[i].m_strNickName.c_str(),
+						m_arrNearUserSimpleInfo[i].m_nGender, m_arrNearUserSimpleInfo[i].m_nAge, m_arrNearUserSimpleInfo[i].m_strHeadImageAddr.c_str(),
+						m_arrNearUserSimpleInfo[i].m_strOneselfWords.c_str(), m_arrNearUserSimpleInfo[i].m_nDistance);
 				offset += nLen;
 			}
 
