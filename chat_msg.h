@@ -21,11 +21,13 @@ class CChatToOneReq : public IMsgBody
 public:
 	CChatToOneReq()
 	{
+		m_nCurTime = 0;
 	}
 
 	string				m_strSrcHeadImage;
 	string				m_strSrcNickName;
 	string				m_strChatMsg;
+	int64_t				m_nCurTime;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -52,13 +54,19 @@ public:
 			return nRet;
 		}
 
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nCurTime);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
 		return nRet;
 	}
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strSrcHeadImage=%s, m_strSrcNickName=%s, m_strChatMsg=%s}",
-				m_strSrcHeadImage.c_str(), m_strSrcNickName.c_str(), m_strChatMsg.c_str());
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strSrcHeadImage=%s, m_strSrcNickName=%s, m_strChatMsg=%s, m_nCurTime=%ld}",
+				m_strSrcHeadImage.c_str(), m_strSrcNickName.c_str(), m_strChatMsg.c_str(), m_nCurTime);
 		offset += nLen;
 	}
 };
@@ -140,18 +148,13 @@ public:
 class CChatReadReq : public IMsgBody
 {
 public:
-	enum
-	{
-		enmMaxCount			= 100,
-	};
 
 	CChatReadReq()
 	{
-		m_nAckCount = 0;
+		m_nReadCount = 0;
 	}
 
-	uint16_t					m_nAckCount;
-	uint32_t					m_arrAckID[enmMaxCount];
+	uint16_t					m_nReadCount;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -160,24 +163,10 @@ public:
 
 	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nAckCount);
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nReadCount);
 		if(nRet != 0)
 		{
 			return nRet;
-		}
-
-		if(m_nAckCount > enmMaxCount)
-		{
-			m_nAckCount = enmMaxCount;
-		}
-
-		for(int32_t i = 0; i < m_nAckCount; ++i)
-		{
-			nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_arrAckID[i]);
-			if(nRet != 0)
-			{
-				return nRet;
-			}
 		}
 
 		return nRet;
@@ -185,16 +174,7 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_nAckCount=%d, m_arrAckID={", m_nAckCount);
-		offset += nLen;
-
-		for(int32_t i = 0; i < m_nAckCount; ++i)
-		{
-			nLen = sprintf(buf + offset, "%u, ", m_arrAckID[i]);
-			offset += nLen;
-		}
-
-		nLen = sprintf(buf + offset, "}");
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_nReadCount=%d}", m_nReadCount);
 		offset += nLen;
 	}
 };

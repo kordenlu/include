@@ -226,13 +226,13 @@ public:
 
 	CGetStationUserListReq()
 	{
-		m_nPos = 0;
+		m_nMinDistance = 0;
 		m_nReqCount = 0;
 	}
 
 	string			m_strBusLineID;
 	string			m_strStationName;
-	uint16_t			m_nPos;
+	uint32_t			m_nMinDistance;
 	uint8_t			m_nReqCount;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
@@ -254,7 +254,7 @@ public:
 			return nRet;
 		}
 
-		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nPos);
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nMinDistance);
 		if(nRet != 0)
 		{
 			return nRet;
@@ -271,8 +271,8 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strBusLineID=%s, m_strStationName=%s, m_nPos=%d, m_nReqCount=%d}",
-				m_strBusLineID.c_str(), m_strStationName.c_str(), m_nPos, m_nReqCount);
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strBusLineID=%s, m_strStationName=%s, m_nMinDistance=%u, m_nReqCount=%d}",
+				m_strBusLineID.c_str(), m_strStationName.c_str(), m_nMinDistance, m_nReqCount);
 		offset += nLen;
 	}
 };

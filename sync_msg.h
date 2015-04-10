@@ -113,7 +113,17 @@ public:
 			return nRet;
 		}
 
-		memcpy(pBuf + nOffset, m_arrMsg, m_nMsgSize);
+		nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nMsgSize);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_arrMsg, m_nMsgSize, m_nMsgSize);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
 
 		return nRet;
 	}

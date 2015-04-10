@@ -18,6 +18,15 @@ using namespace FRAME;
 class MsgHeadCS : public IMsgHead
 {
 public:
+	MsgHeadCS()
+	{
+		m_nTotalSize = 0;
+		m_nMsgID = 0;
+		m_nSeq = 0;
+		m_nSrcUin = 0;
+		m_nDstUin = 0;
+	}
+
 	virtual int32_t GetSize()
 	{
 		return (sizeof(m_nTotalSize) + sizeof(m_nMsgID) + sizeof(m_nSeq) + sizeof(m_nSrcUin) + sizeof(m_nDstUin));
