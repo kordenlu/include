@@ -13,6 +13,11 @@ using namespace FRAME;
 
 #define MAX_FIELD_SIZE		256
 
+#define UNHANDLE_USER_LIST		"unhandle:userlist"
+#define USER_UNREAD_LOCK		"user:unread:lock:"
+#define ACCOUNT_POOL				"account:pool"
+
+
 #define REGIST_PHONEINFO	"regist:phoneinfo:"
 class RegistPhoneInfo : public IConfig
 {
@@ -67,30 +72,6 @@ public:
 	char string[MAX_FIELD_SIZE];
 	char regist_count[MAX_FIELD_SIZE];
 	char last_regist_date[MAX_FIELD_SIZE];
-};
-
-#define GLOBAL_UIN		"gobal:uin"
-class GlobalUin : public IConfig
-{
-public:
-	GlobalUin(const char *pConfigName)
-	{
-		strcpy(string, pConfigName);
-	}
-	//初始化配置
-	virtual int32_t Init()
-	{
-		strcpy(uin, "uin");
-		return 0;
-	}
-	//卸载配置
-	virtual int32_t Uninit()
-	{
-		return 0;
-	}
-
-	char string[MAX_FIELD_SIZE];
-	char uin[MAX_FIELD_SIZE];
 };
 
 #define USER_BASEINFO		"user:baseinfo:"
@@ -268,49 +249,5 @@ public:
 	char timestamp[MAX_FIELD_SIZE];
 	char unreadmsg[MAX_FIELD_SIZE];
 };
-
-#define UNHANDLE_USER_LIST		"unhandle:userlist"
-class UnhandleUserList : public IConfig
-{
-public:
-	UnhandleUserList(const char *pConfigName)
-	{
-		strcpy(string, pConfigName);
-	}
-	//初始化配置
-	virtual int32_t Init()
-	{
-		return 0;
-	}
-	//卸载配置
-	virtual int32_t Uninit()
-	{
-		return 0;
-	}
-	char string[MAX_FIELD_SIZE];
-};
-
-
-#define USER_UNREAD_LOCK		"user:unread:lock:"
-class UserUnreadLock : public IConfig
-{
-public:
-	UserUnreadLock(const char *pConfigName)
-	{
-		strcpy(string, pConfigName);
-	}
-	//初始化配置
-	virtual int32_t Init()
-	{
-		return 0;
-	}
-	//卸载配置
-	virtual int32_t Uninit()
-	{
-		return 0;
-	}
-	char string[MAX_FIELD_SIZE];
-};
-
 
 #endif /* CACHEKEY_DEFINE_H_ */
