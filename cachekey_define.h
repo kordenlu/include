@@ -16,6 +16,7 @@ using namespace FRAME;
 #define UNHANDLE_USER_LIST		"unhandle:userlist"
 #define USER_UNREAD_LOCK		"user:unread:lock:"
 #define ACCOUNT_POOL				"account:pool"
+#define ACCOUNTID					"accountid:"
 
 
 #define REGIST_PHONEINFO	"regist:phoneinfo:"
