@@ -92,6 +92,7 @@ public:
 	enum
 	{
 		enmResult_OK				= 0x00,
+		enmResult_CanNotWrite	= 0x01,
 		enmResult_Unknown			= 0xff,
 	};
 
@@ -209,8 +210,10 @@ public:
 	{
 		m_nResult = 0;
 		m_nVersion = 0;
+		m_nUin = 0;
+		m_nGender = 0;
 		m_nAge = 0;
-		m_nCarePeopleCount = 0;
+		m_nFollowPeopleCount = 0;
 		m_nFansCount = 0;
 		m_nFriendsCount = 0;
 		m_nPublishTopicCount = 0;
@@ -219,8 +222,13 @@ public:
 
 	uint8_t					m_nResult;
 	string					m_strTips;
-	uint32_t				m_nVersion;
+	uint32_t					m_nVersion;
+	uint32_t					m_nUin;
+	string					m_strAccountID;
+	string					m_strNickName;
+	string					m_strHeadImage;
 	string					m_strOneselfWords;
+	uint8_t					m_nGender;
 	string					m_strSchool;
 	string					m_strHometown;
 	string					m_strBirthday;
@@ -229,11 +237,12 @@ public:
 	string					m_strHeight;
 	string					m_strWeight;
 	string					m_strJob;
-	uint32_t					m_nCarePeopleCount;
+	uint32_t					m_nFollowPeopleCount;
 	uint32_t					m_nFansCount;
 	uint32_t					m_nFriendsCount;
 	uint32_t					m_nPublishTopicCount;
 	uint32_t					m_nJoinTopicCount;
+	string					m_strPhotoWall;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -251,7 +260,37 @@ public:
 				return nRet;
 			}
 
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nUin);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strAccountID);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strNickName);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strHeadImage);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strOneselfWords);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nGender);
 			if(nRet != 0)
 			{
 				return nRet;
@@ -305,7 +344,7 @@ public:
 				return nRet;
 			}
 
-			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nCarePeopleCount);
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFollowPeopleCount);
 			if(nRet != 0)
 			{
 				return nRet;
@@ -330,6 +369,12 @@ public:
 			}
 
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nJoinTopicCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strPhotoWall);
 			if(nRet != 0)
 			{
 				return nRet;
@@ -364,12 +409,14 @@ public:
 		}
 		else if(m_nResult == enmResult_OK)
 		{
-			nLen = sprintf(buf + offset, ", m_nVersion=%u, m_strOneselfWords=%s, m_strSchool=%s, m_strHometown=%s, "
-					"m_strBirthday=%s, m_nAge=%d, m_strLivePlace=%s, m_strHeight=%s, m_strWeight=%s, m_strJob=%s, m_nCarePeopleCount=%u, "
-					"m_nFansCount=%u, m_nFriendsCount=%u, m_nPublishTopicCount=%u, m_nJoinTopicCount=%u",
-					m_nVersion, m_strOneselfWords.c_str(), m_strSchool.c_str(), m_strHometown.c_str(), m_strBirthday.c_str(),
-					m_nAge, m_strLivePlace.c_str(), m_strHeight.c_str(), m_strWeight.c_str(), m_strJob.c_str(), m_nCarePeopleCount,
-					m_nFansCount, m_nFriendsCount, m_nPublishTopicCount, m_nJoinTopicCount);
+			nLen = sprintf(buf + offset, ", m_nVersion=%u, m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_strHeadImage=%s, "
+					"m_strOneselfWords=%s, m_nGender=%d, m_strSchool=%s, m_strHometown=%s, "
+					"m_strBirthday=%s, m_nAge=%d, m_strLivePlace=%s, m_strHeight=%s, m_strWeight=%s, m_strJob=%s, m_nFollowPeopleCount=%u, "
+					"m_nFansCount=%u, m_nFriendsCount=%u, m_nPublishTopicCount=%u, m_nJoinTopicCount=%u, m_strPhotoWall=%s",
+					m_nVersion, m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_strHeadImage.c_str(), m_strOneselfWords.c_str(),
+					m_nGender, m_strSchool.c_str(), m_strHometown.c_str(), m_strBirthday.c_str(),
+					m_nAge, m_strLivePlace.c_str(), m_strHeight.c_str(), m_strWeight.c_str(), m_strJob.c_str(), m_nFollowPeopleCount,
+					m_nFansCount, m_nFriendsCount, m_nPublishTopicCount, m_nJoinTopicCount, m_strPhotoWall.c_str());
 			offset += nLen;
 		}
 		else
