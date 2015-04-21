@@ -8,6 +8,8 @@
 #ifndef CACHEKEY_DEFINE_H_
 #define CACHEKEY_DEFINE_H_
 
+#include <map>
+#include <string>
 #include "../frame/frame_impl.h"
 using namespace FRAME;
 
@@ -78,38 +80,101 @@ public:
 #define USER_BASEINFO		"user:baseinfo:"
 class UserBaseInfo : public IConfig
 {
+	std::map<std::string, uint8_t>		m_stFieldPer;
 public:
 	UserBaseInfo(const char *pConfigName)
 	{
 		strcpy(string, pConfigName);
 	}
 
+	bool CanWrite(std::string strField)
+	{
+		std::map<std::string, uint8_t>::iterator it = m_stFieldPer.find(strField);
+		if(it != m_stFieldPer.end())
+		{
+			if(it->second != 0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	//初始化配置
 	virtual int32_t Init()
 	{
 		strcpy(version, "version");
+		m_stFieldPer[version] = 0;
+
 		strcpy(accountname, "accountname");
+		m_stFieldPer[accountname] = 0;
+
 		strcpy(uin, "uin");
+		m_stFieldPer[uin] = 0;
+
+		strcpy(accountid, "accountid");
+		m_stFieldPer[accountid] = 0;
+
 		strcpy(oneselfwords, "oneselfwords");
-		strcpy(school, "school");
-		strcpy(hometown, "hometown");
-		strcpy(birthplace, "birthplace");
-		strcpy(liveplace, "liveplace");
-		strcpy(job, "job");
-		strcpy(age, "age");
-		strcpy(height, "height");
-		strcpy(weight, "weight");
-		strcpy(nickname, "nickname");
+		m_stFieldPer[oneselfwords] = 1;
+
 		strcpy(gender, "gender");
+		m_stFieldPer[gender] = 0;
+
+		strcpy(school, "school");
+		m_stFieldPer[school] = 1;
+
+		strcpy(hometown, "hometown");
+		m_stFieldPer[hometown] = 1;
+
+		strcpy(birthplace, "birthplace");
+		m_stFieldPer[birthplace] = 1;
+
+		strcpy(liveplace, "liveplace");
+		m_stFieldPer[liveplace] = 1;
+
+		strcpy(job, "job");
+		m_stFieldPer[job] = 1;
+
+		strcpy(height, "height");
+		m_stFieldPer[height] = 1;
+
+		strcpy(weight, "weight");
+		m_stFieldPer[weight] = 1;
+
+		strcpy(nickname, "nickname");
+		m_stFieldPer[nickname] = 1;
+
 		strcpy(headimage, "headimage");
+		m_stFieldPer[headimage] = 1;
+
+		strcpy(photowall, "photowall");
+		m_stFieldPer[photowall] = 1;
+
 		strcpy(createtime, "createtime");
+		m_stFieldPer[createtime] = 0;
+
 		strcpy(birthday, "birthday");
+		m_stFieldPer[birthday] = 1;
+
 		strcpy(age, "age");
-		strcpy(care_people_count, "care_people_count");
+		m_stFieldPer[version] = 1;
+
+		strcpy(follow_people_count, "follow_people_count");
+		m_stFieldPer[follow_people_count] = 1;
+
 		strcpy(fans_count, "fans_count");
+		m_stFieldPer[fans_count] = 1;
+
 		strcpy(friends_count, "friends_count");
+		m_stFieldPer[friends_count] = 1;
+
 		strcpy(publishtopic_count, "publishtopic_count");
+		m_stFieldPer[publishtopic_count] = 1;
+
 		strcpy(jointopic_count, "jointopic_count");
+		m_stFieldPer[jointopic_count] = 1;
+
 		return 0;
 	}
 	//卸载配置
@@ -122,8 +187,10 @@ public:
 	char version[MAX_FIELD_SIZE];
 	char accountname[MAX_FIELD_SIZE];
 	char uin[MAX_FIELD_SIZE];
+	char accountid[MAX_FIELD_SIZE];
 	char nickname[MAX_FIELD_SIZE];
 	char oneselfwords[MAX_FIELD_SIZE];
+	char gender[MAX_FIELD_SIZE];
 	char school[MAX_FIELD_SIZE];
 	char hometown[MAX_FIELD_SIZE];
 	char birthplace[MAX_FIELD_SIZE];
@@ -131,12 +198,12 @@ public:
 	char job[MAX_FIELD_SIZE];
 	char height[MAX_FIELD_SIZE];
 	char weight[MAX_FIELD_SIZE];
-	char gender[MAX_FIELD_SIZE];
 	char headimage[MAX_FIELD_SIZE];
+	char photowall[MAX_FIELD_SIZE];
 	char createtime[MAX_FIELD_SIZE];
 	char birthday[MAX_FIELD_SIZE];
 	char age[MAX_FIELD_SIZE];
-	char care_people_count[MAX_FIELD_SIZE];
+	char follow_people_count[MAX_FIELD_SIZE];
 	char fans_count[MAX_FIELD_SIZE];
 	char friends_count[MAX_FIELD_SIZE];
 	char publishtopic_count[MAX_FIELD_SIZE];
