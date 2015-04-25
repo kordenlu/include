@@ -429,4 +429,96 @@ public:
 	}
 };
 
+#define MSGID_FOLLOWUSER_REQ		113
+class CFollowUserReq : public IMsgBody
+{
+public:
+	enum
+	{
+		enmFollowType_Add			= 0x00,
+		enmFollowTypw_Cancel		= 0x00,
+	};
+	CFollowUserReq()
+	{
+		m_nFollowType = enmFollowType_Add;
+	}
+
+	uint8_t					m_nFollowType;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_nFollowType=%d}", m_nFollowType);
+		offset += nLen;;
+	}
+};
+
+#define MSGID_FOLLOWUSER_RESP		114
+class CFollowUserResp : public IMsgBody
+{
+public:
+	enum
+	{
+		enmResult_OK				= 0x00,
+		enmResult_Unknown			= 0xff,
+	};
+
+	CFollowUserResp()
+	{
+		m_nResult = enmResult_OK;
+	}
+
+	uint8_t					m_nResult;
+	string					m_strTips;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		if(m_nResult != 0)
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strTips);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+
+		return nRet;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_nResult=%d", m_nResult);
+		offset += nLen;
+
+		if(m_nResult != 0)
+		{
+			nLen = sprintf(buf + offset, ", m_strTips=%s", m_strTips.c_str());
+			offset += nLen;
+		}
+		nLen = sprintf(buf + offset, "}");
+		offset += nLen;
+	}
+};
+
+
 #endif /* CONTACTS_MSG_H_ */

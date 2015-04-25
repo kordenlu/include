@@ -20,7 +20,7 @@ using namespace FRAME;
 #define ACCOUNT_POOL				"account:pool"
 #define ACCOUNTID					"accountid:"
 
-
+//hash
 #define REGIST_PHONEINFO	"regist:phoneinfo:"
 class RegistPhoneInfo : public IConfig
 {
@@ -51,6 +51,7 @@ public:
 	char auth_code_expire_time[MAX_FIELD_SIZE];
 };
 
+//hash
 #define REGIST_ADDRINFO		"regist:addrinfo:"
 class RegistAddrInfo : public IConfig
 {
@@ -77,6 +78,7 @@ public:
 	char last_regist_date[MAX_FIELD_SIZE];
 };
 
+//hash
 #define USER_BASEINFO		"user:baseinfo:"
 class UserBaseInfo : public IConfig
 {
@@ -160,8 +162,8 @@ public:
 		strcpy(age, "age");
 		m_stFieldPer[version] = 1;
 
-		strcpy(follow_people_count, "follow_people_count");
-		m_stFieldPer[follow_people_count] = 1;
+		strcpy(followers_count, "followers_count");
+		m_stFieldPer[followers_count] = 1;
 
 		strcpy(fans_count, "fans_count");
 		m_stFieldPer[fans_count] = 1;
@@ -169,8 +171,8 @@ public:
 		strcpy(friends_count, "friends_count");
 		m_stFieldPer[friends_count] = 1;
 
-		strcpy(publishtopic_count, "publishtopic_count");
-		m_stFieldPer[publishtopic_count] = 1;
+		strcpy(pubtopic_count, "pubtopic_count");
+		m_stFieldPer[pubtopic_count] = 1;
 
 		strcpy(jointopic_count, "jointopic_count");
 		m_stFieldPer[jointopic_count] = 1;
@@ -203,13 +205,14 @@ public:
 	char createtime[MAX_FIELD_SIZE];
 	char birthday[MAX_FIELD_SIZE];
 	char age[MAX_FIELD_SIZE];
-	char follow_people_count[MAX_FIELD_SIZE];
+	char followers_count[MAX_FIELD_SIZE];
 	char fans_count[MAX_FIELD_SIZE];
 	char friends_count[MAX_FIELD_SIZE];
-	char publishtopic_count[MAX_FIELD_SIZE];
+	char pubtopic_count[MAX_FIELD_SIZE];
 	char jointopic_count[MAX_FIELD_SIZE];
 };
 
+//hash
 #define ACCOUNT_INFO			"accountinfo:"
 class AccountInfo : public IConfig
 {
@@ -241,6 +244,7 @@ public:
 	char status[MAX_FIELD_SIZE];
 };
 
+//hash
 #define USER_BLACKLIST			"user:blacklist:"
 class UserBlackList : public IConfig
 {
@@ -264,6 +268,7 @@ public:
 	char uin[MAX_FIELD_SIZE];
 };
 
+//hash
 #define USER_SESSIONINFO			"user:sessioninfo:"
 class UserSessionInfo : public IConfig
 {
@@ -293,6 +298,7 @@ public:
 	char gateid[MAX_FIELD_SIZE];
 };
 
+//list
 #define USER_UNREADMSGLIST			"user:unreadmsglist:"
 class UserUnreadMsgList : public IConfig
 {
@@ -316,6 +322,60 @@ public:
 	char string[MAX_FIELD_SIZE];
 	char timestamp[MAX_FIELD_SIZE];
 	char unreadmsg[MAX_FIELD_SIZE];
+};
+
+//sortedset
+#define USER_FANS				"user:fans:"
+class UserFans : public IConfig
+{
+public:
+	UserFans(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		strcpy(addtime, "addtime");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+	char addtime[MAX_FIELD_SIZE];
+};
+
+//sortedset
+#define USER_FOLLOWERS				"user:followers:"
+class UserFollowers : public IConfig
+{
+public:
+	UserFollowers(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		strcpy(addtime, "addtime");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+	char addtime[MAX_FIELD_SIZE];
 };
 
 #endif /* CACHEKEY_DEFINE_H_ */
