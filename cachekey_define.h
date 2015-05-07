@@ -8,6 +8,7 @@
 #ifndef CACHEKEY_DEFINE_H_
 #define CACHEKEY_DEFINE_H_
 
+#include <string.h>
 #include <map>
 #include <string>
 #include "../frame/frame_impl.h"
@@ -15,10 +16,25 @@ using namespace FRAME;
 
 #define MAX_FIELD_SIZE		256
 
+//list
+#define CLIENT_RESP				"client:resp"
+//list
 #define UNHANDLE_USER_LIST		"unhandle:userlist"
+//string
 #define USER_UNREAD_LOCK		"user:unread:lock:"
+//list
 #define ACCOUNT_POOL				"account:pool"
+//string
 #define ACCOUNTID					"accountid:"
+
+//sortedset
+#define TOPICS_RECOMMEND			"topics:recommend"
+//list
+#define TOPICS_LAST					"topics:last"
+//list
+#define USER_CREATETOPICS			"user:createtopics:"
+//list
+#define TOPIC_COMMENTS				"topic:comments:"
 
 //hash
 #define REGIST_PHONEINFO	"regist:phoneinfo:"
@@ -171,8 +187,8 @@ public:
 		strcpy(friends_count, "friends_count");
 		m_stFieldPer[friends_count] = 1;
 
-		strcpy(pubtopic_count, "pubtopic_count");
-		m_stFieldPer[pubtopic_count] = 1;
+		strcpy(createtopic_count, "createtopic_count");
+		m_stFieldPer[createtopic_count] = 1;
 
 		strcpy(jointopic_count, "jointopic_count");
 		m_stFieldPer[jointopic_count] = 1;
@@ -208,7 +224,7 @@ public:
 	char followers_count[MAX_FIELD_SIZE];
 	char fans_count[MAX_FIELD_SIZE];
 	char friends_count[MAX_FIELD_SIZE];
-	char pubtopic_count[MAX_FIELD_SIZE];
+	char createtopic_count[MAX_FIELD_SIZE];
 	char jointopic_count[MAX_FIELD_SIZE];
 };
 
@@ -376,6 +392,146 @@ public:
 	char string[MAX_FIELD_SIZE];
 	char uin[MAX_FIELD_SIZE];
 	char addtime[MAX_FIELD_SIZE];
+};
+
+//hash
+#define TOPIC_INFO				"topic:info:"
+class TopicInfo : public IConfig
+{
+public:
+	TopicInfo(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		strcpy(createtime, "createtime");
+		strcpy(bgurl, "bgurl");
+		strcpy(content, "content");
+		strcpy(likecount, "likecount");
+		strcpy(floorcount, "floorcount");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+	char createtime[MAX_FIELD_SIZE];
+	char bgurl[MAX_FIELD_SIZE];
+	char content[MAX_FIELD_SIZE];
+	char likecount[MAX_FIELD_SIZE];
+	char floorcount[MAX_FIELD_SIZE];
+};
+
+////list
+//#define USER_TOPIC_FLOOR			"user:topicfloor:"
+//class UserTopicFloor : public IConfig
+//{
+//public:
+//	UserTopicFloor(const char *pConfigName)
+//	{
+//		strcpy(string, pConfigName);
+//	}
+//	//初始化配置
+//	virtual int32_t Init()
+//	{
+//		strcpy(uin, "uin");
+//
+//		strcpy(userdata, "userdata");
+//		strcpy(accountid, "accountid");
+//		strcpy(nickname, "nickname");
+//		strcpy(headimage, "headimage");
+//		strcpy(gender, "gender");
+//
+//		strcpy(commentdata, "commentdata");
+//		strcpy(comment, "comment");
+//		strcpy(commenttime, "commenttime");
+//		strcpy(quotefloorid, "quotefloorid");
+//		strcpy(quotenickname, "quotenickname");
+//		strcpy(quotefloor, "quotefloor");
+//		return 0;
+//	}
+//	//卸载配置
+//	virtual int32_t Uninit()
+//	{
+//		return 0;
+//	}
+//
+//	char string[MAX_FIELD_SIZE];
+//	char uin[MAX_FIELD_SIZE];
+//
+//	char userdata[MAX_FIELD_SIZE];
+//	char accountid[MAX_FIELD_SIZE];
+//	char nickname[MAX_FIELD_SIZE];
+//	char headimage[MAX_FIELD_SIZE];
+//	char gender[MAX_FIELD_SIZE];
+//
+//	char commentdata[MAX_FIELD_SIZE];
+//	char comment[MAX_FIELD_SIZE];
+//	char commenttime[MAX_FIELD_SIZE];
+//	char quotefloorid[MAX_FIELD_SIZE];
+//	char quotenickname[MAX_FIELD_SIZE];
+//	char quotefloor[MAX_FIELD_SIZE];
+//};
+
+//list
+#define USER_JOINTOPICS			"user:jointopics:"
+class UserJoinTopics : public IConfig
+{
+public:
+	UserJoinTopics(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+
+	char string[MAX_FIELD_SIZE];
+};
+
+//list
+#define USER_RECVCOMMENTS			"user:recvcomments:"
+class UserRecvComments : public IConfig
+{
+public:
+	UserRecvComments(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		strcpy(topicid, "topicid");			//topicid
+		strcpy(type, "type");
+		strcpy(comment, "comment");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+	char topicid[MAX_FIELD_SIZE];
+	char type[MAX_FIELD_SIZE];
+	char comment[MAX_FIELD_SIZE];
 };
 
 #endif /* CACHEKEY_DEFINE_H_ */

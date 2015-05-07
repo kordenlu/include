@@ -506,5 +506,38 @@ public:
 	}
 };
 
+#define MSGID_KICKUSER_NOTI		21
+class CKickUserNoti : public IMsgBody
+{
+public:
+	CKickUserNoti()
+	{
+	}
+
+	string			m_strReason;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strReason);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		return nRet;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
+	{
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_strReason=%s}", m_strReason.c_str());
+		nOffset += nLen;
+	}
+};
+
 
 #endif /* ACCOUNT_MSG_H_ */

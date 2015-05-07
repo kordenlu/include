@@ -520,5 +520,118 @@ public:
 	}
 };
 
+#define MSGID_GETUIN_REQ		126
+class CGetUinReq : public IMsgBody
+{
+public:
+	CGetUinReq()
+	{
+	}
+
+	string				m_strAccountID;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strAccountID);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		return nRet;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strAccountID=%s}", m_strAccountID.c_str());
+		offset += nLen;;
+	}
+};
+
+#define MSGID_GETUIN_RESP		127
+class CGetUinResp : public IMsgBody
+{
+public:
+	enum
+	{
+		enmResult_OK				= 0x00,
+		enmResult_USERNOTEXIST		= 0x01,
+		enmResult_Unknown			= 0xff,
+	};
+
+	CGetUinResp()
+	{
+		m_nResult = enmResult_OK;
+		m_nUin = 0;
+		m_nVersion = 0;
+	}
+
+	uint8_t					m_nResult;
+	string					m_strTips;
+	uint32_t				m_nUin;
+	uint32_t				m_nVersion;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		if(m_nResult != 0)
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strTips);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+		else
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nUin);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nVersion);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+
+		return nRet;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_nResult=%d", m_nResult);
+		offset += nLen;
+
+		if(m_nResult != 0)
+		{
+			nLen = sprintf(buf + offset, ", m_strTips=%s}", m_strTips.c_str());
+			offset += nLen;
+		}
+		else
+		{
+			nLen = sprintf(buf + offset, ", m_nUin=%u, m_nVersion=%u}", m_nUin, m_nVersion);
+			offset += nLen;
+		}
+	}
+};
+
 
 #endif /* CONTACTS_MSG_H_ */
