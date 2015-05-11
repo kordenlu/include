@@ -210,6 +210,7 @@ public:
 	{
 		m_nResult = 0;
 		m_nVersion = 0;
+		m_nIsFollow = 0;
 		m_nUin = 0;
 		m_nGender = 0;
 		m_nAge = 0;
@@ -222,6 +223,7 @@ public:
 
 	uint8_t					m_nResult;
 	string					m_strTips;
+	uint8_t					m_nIsFollow;
 	uint32_t					m_nVersion;
 	uint32_t					m_nUin;
 	string					m_strAccountID;
@@ -254,6 +256,12 @@ public:
 
 		if(m_nResult == enmResult_OK)
 		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nIsFollow);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nVersion);
 			if(nRet != 0)
 			{
@@ -409,11 +417,11 @@ public:
 		}
 		else if(m_nResult == enmResult_OK)
 		{
-			nLen = sprintf(buf + offset, ", m_nVersion=%u, m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_strHeadImage=%s, "
+			nLen = sprintf(buf + offset, ", m_nVersion=%u, m_nIsFollow=%u, m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_strHeadImage=%s, "
 					"m_strOneselfWords=%s, m_nGender=%d, m_strSchool=%s, m_strHometown=%s, "
 					"m_strBirthday=%s, m_nAge=%d, m_strLivePlace=%s, m_strHeight=%s, m_strWeight=%s, m_strJob=%s, m_nFollowPeopleCount=%u, "
 					"m_nFansCount=%u, m_nFriendsCount=%u, m_nPublishTopicCount=%u, m_nJoinTopicCount=%u, m_strPhotoWall=%s",
-					m_nVersion, m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_strHeadImage.c_str(), m_strOneselfWords.c_str(),
+					m_nVersion, m_nIsFollow, m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_strHeadImage.c_str(), m_strOneselfWords.c_str(),
 					m_nGender, m_strSchool.c_str(), m_strHometown.c_str(), m_strBirthday.c_str(),
 					m_nAge, m_strLivePlace.c_str(), m_strHeight.c_str(), m_strWeight.c_str(), m_strJob.c_str(), m_nFollowPeopleCount,
 					m_nFansCount, m_nFriendsCount, m_nPublishTopicCount, m_nJoinTopicCount, m_strPhotoWall.c_str());
@@ -436,7 +444,7 @@ public:
 	enum
 	{
 		enmFollowType_Add			= 0x00,
-		enmFollowTypw_Cancel		= 0x00,
+		enmFollowTypw_Cancel		= 0x01,
 	};
 	CFollowUserReq()
 	{
@@ -469,6 +477,7 @@ public:
 	enum
 	{
 		enmResult_OK				= 0x00,
+		enmResult_InBlackList		= 0x01,
 		enmResult_Unknown			= 0xff,
 	};
 

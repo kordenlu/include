@@ -35,6 +35,8 @@ using namespace FRAME;
 #define USER_CREATETOPICS			"user:createtopics:"
 //list
 #define TOPIC_COMMENTS				"topic:comments:"
+//list
+#define PUSH_APNS					"push:apns"
 
 //hash
 #define REGIST_PHONEINFO	"regist:phoneinfo:"
@@ -187,11 +189,26 @@ public:
 		strcpy(friends_count, "friends_count");
 		m_stFieldPer[friends_count] = 1;
 
-		strcpy(createtopic_count, "createtopic_count");
-		m_stFieldPer[createtopic_count] = 1;
+		strcpy(createtopics_count, "createtopics_count");
+		m_stFieldPer[createtopics_count] = 1;
 
-		strcpy(jointopic_count, "jointopic_count");
-		m_stFieldPer[jointopic_count] = 1;
+		strcpy(jointopics_count, "jointopics_count");
+		m_stFieldPer[jointopics_count] = 1;
+
+		strcpy(phonetype, "phonetype");
+		m_stFieldPer[phonetype] = 1;
+
+		strcpy(osversion, "osversion");
+		m_stFieldPer[osversion] = 1;
+
+		strcpy(phonestyle, "phonestyle");
+		m_stFieldPer[phonestyle] = 1;
+
+		strcpy(lastlogintime, "lastlogintime");
+		m_stFieldPer[lastlogintime] = 1;
+
+		strcpy(devicetoken, "devicetoken");
+		m_stFieldPer[devicetoken] = 1;
 
 		return 0;
 	}
@@ -224,8 +241,13 @@ public:
 	char followers_count[MAX_FIELD_SIZE];
 	char fans_count[MAX_FIELD_SIZE];
 	char friends_count[MAX_FIELD_SIZE];
-	char createtopic_count[MAX_FIELD_SIZE];
-	char jointopic_count[MAX_FIELD_SIZE];
+	char createtopics_count[MAX_FIELD_SIZE];
+	char jointopics_count[MAX_FIELD_SIZE];
+	char phonetype[MAX_FIELD_SIZE];
+	char osversion[MAX_FIELD_SIZE];
+	char phonestyle[MAX_FIELD_SIZE];
+	char lastlogintime[MAX_FIELD_SIZE];
+	char devicetoken[MAX_FIELD_SIZE];
 };
 
 //hash
@@ -260,7 +282,7 @@ public:
 	char status[MAX_FIELD_SIZE];
 };
 
-//hash
+//sortedset
 #define USER_BLACKLIST			"user:blacklist:"
 class UserBlackList : public IConfig
 {
@@ -300,6 +322,7 @@ public:
 		strcpy(clientaddress, "clientaddress");
 		strcpy(clientport, "clientport");
 		strcpy(gateid, "gateid");
+		strcpy(phonetype, "phonetype");
 		return 0;
 	}
 	//卸载配置
@@ -312,6 +335,7 @@ public:
 	char clientaddress[MAX_FIELD_SIZE];
 	char clientport[MAX_FIELD_SIZE];
 	char gateid[MAX_FIELD_SIZE];
+	char phonetype[MAX_FIELD_SIZE];
 };
 
 //list
@@ -373,6 +397,33 @@ class UserFollowers : public IConfig
 {
 public:
 	UserFollowers(const char *pConfigName)
+	{
+		strcpy(string, pConfigName);
+	}
+	//初始化配置
+	virtual int32_t Init()
+	{
+		strcpy(uin, "uin");
+		strcpy(addtime, "addtime");
+		return 0;
+	}
+	//卸载配置
+	virtual int32_t Uninit()
+	{
+		return 0;
+	}
+
+	char string[MAX_FIELD_SIZE];
+	char uin[MAX_FIELD_SIZE];
+	char addtime[MAX_FIELD_SIZE];
+};
+
+//sortedset
+#define USER_FRIENDS				"user:friends:"
+class UserFriends : public IConfig
+{
+public:
+	UserFriends(const char *pConfigName)
 	{
 		strcpy(string, pConfigName);
 	}

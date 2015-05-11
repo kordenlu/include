@@ -13,6 +13,7 @@
 #include "../common/common_api.h"
 #include "../frame/frame_impl.h"
 #include "../netevent/net_typedef.h"
+#include "typedef.h"
 #include <string>
 
 using namespace std;
@@ -24,6 +25,7 @@ enum
 	enmControlCode_Trans		= 0x00,
 	enmControlCode_Close		= 0x01,
 };
+
 
 class ControlHead : public ICtlHead
 {
@@ -39,13 +41,14 @@ public:
 		m_nClientPort = 0;
 		m_nGateID = 0;
 		m_nTimeStamp = 0;
+		m_nPhoneType = 0;
 	}
 
 	virtual int32_t GetSize()
 	{
 		return (sizeof(m_nTotalSize) + sizeof(m_nHeadSize) + sizeof(m_nControlCode) +
 				sizeof(m_nUin) + sizeof(m_nSessionID) + sizeof(m_nClientAddress) + sizeof(m_nClientPort) +
-				sizeof(m_nGateID) + sizeof(m_nTimeStamp));
+				sizeof(m_nGateID) + sizeof(m_nTimeStamp) + sizeof(m_nPhoneType));
 	}
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
@@ -59,6 +62,7 @@ public:
 		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nClientPort);
 		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nGateID);
 		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nTimeStamp);
+		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nPhoneType);
 
 		return 0;
 	}
@@ -74,6 +78,7 @@ public:
 		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nClientPort);
 		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nGateID);
 		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nTimeStamp);
+		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nPhoneType);
 
 		return 0;
 	}
@@ -81,8 +86,9 @@ public:
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
 		uint32_t nLen = sprintf(buf + offset, "controlhead={m_nTotalSize=%d, m_nHeadSize=%d, m_nControlCode=%d, m_nUin=%u, "
-				"m_nSessionID=%u, m_nClientAddress=%s, m_nClientPort=%d, m_nGateID=%d, m_nTimeStamp=%ld}", m_nTotalSize,
-				m_nHeadSize, m_nControlCode, m_nUin, m_nSessionID, inet_ntoa_f(m_nClientAddress), m_nClientPort, m_nGateID, m_nTimeStamp);
+				"m_nSessionID=%u, m_nClientAddress=%s, m_nClientPort=%d, m_nGateID=%d, m_nTimeStamp=%ld, m_nPhoneType=%d}", m_nTotalSize,
+				m_nHeadSize, m_nControlCode, m_nUin, m_nSessionID, inet_ntoa_f(m_nClientAddress), m_nClientPort, m_nGateID, m_nTimeStamp,
+				m_nPhoneType);
 		offset += nLen;
 	}
 
@@ -95,6 +101,7 @@ public:
 	uint16_t			m_nClientPort;
 	uint16_t			m_nGateID;
 	int64_t			m_nTimeStamp;
+	uint8_t				m_nPhoneType;
 };
 
 

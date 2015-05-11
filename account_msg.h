@@ -10,6 +10,7 @@
 
 #include "../common/common_codeengine.h"
 #include "../frame/frame_impl.h"
+#include "typedef.h"
 #include <string>
 #include <stdio.h>
 using namespace std;
@@ -113,12 +114,17 @@ class CVerifyAuthCodeReq : public IMsgBody
 public:
 	CVerifyAuthCodeReq()
 	{
+		m_nPhoneType = 0;
 		m_nAuthCode = 0;
 	}
 
+	uint8_t			m_nPhoneType;
 	string			m_strPhone;
 	string			m_strPassword;
 	int32_t			m_nAuthCode;
+	string			m_strOSVer;
+	string			m_strPhoneStyle;
+	string			m_strDeviceToken;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -127,7 +133,13 @@ public:
 
 	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhone);
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nPhoneType);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhone);
 		if(nRet != 0)
 		{
 			return nRet;
@@ -144,13 +156,27 @@ public:
 		{
 			return nRet;
 		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strOSVer);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhoneStyle);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
 		return nRet;
 	}
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strPhone=%s, m_strPassword=%s, m_nAuthCode=%d}",
-				m_strPhone.c_str(), m_strPassword.c_str(), m_nAuthCode);
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_nPhoneType=%d, m_strPhone=%s, m_strPassword=%s, m_nAuthCode=%d, "
+				"m_strOSVer=%s, m_strPhoneStyle=%s}",
+				m_nPhoneType, m_strPhone.c_str(), m_strPassword.c_str(), m_nAuthCode, m_strOSVer.c_str(), m_strPhoneStyle.c_str());
 		offset += nLen;
 	}
 };
@@ -358,10 +384,14 @@ class CUserLoginReq : public IMsgBody
 public:
 	CUserLoginReq()
 	{
+		m_nPhoneType = 0;
 	}
 
+	uint8_t			m_nPhoneType;
 	string			m_strAccountName;
 	string			m_strPassword;
+	string			m_strOSVer;
+	string			m_strPhoneStyle;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -370,7 +400,13 @@ public:
 
 	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
-		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strAccountName);
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nPhoneType);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strAccountName);
 		if(nRet != 0)
 		{
 			return nRet;
@@ -381,13 +417,27 @@ public:
 		{
 			return nRet;
 		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strOSVer);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhoneStyle);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
 		return nRet;
 	}
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strAccountName=%s, m_strPassword=%s}",
-				m_strAccountName.c_str(), m_strPassword.c_str());
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_nPhoneType=%d, m_strAccountName=%s, m_strPassword=%s, m_strOSVer=%s, "
+				"m_strPhoneStyle=%s}",
+				m_nPhoneType, m_strAccountName.c_str(), m_strPassword.c_str(), m_strOSVer.c_str(), m_strPhoneStyle.c_str());
 		offset += nLen;
 	}
 };
@@ -420,6 +470,11 @@ public:
 	uint8_t			m_nGender;
 	string			m_strHeadImageAddr;
 	uint32_t			m_nSelfInfoVersion;
+	uint32_t		m_nFollowersCount;
+	uint32_t		m_nFansCount;
+	uint32_t		m_nFriendsCount;
+	uint32_t		m_nCreateTopicsCount;
+	uint32_t		m_nJoinTopicsCount;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -474,6 +529,36 @@ public:
 			{
 				return nRet;
 			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFollowersCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFansCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nFriendsCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nCreateTopicsCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nJoinTopicsCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
 		}
 		return nRet;
 	}
@@ -496,8 +581,10 @@ public:
 		else
 		{
 			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s, "
-					"m_nSelfInfoVersion=%u",
-					m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nSelfInfoVersion);
+					"m_nSelfInfoVersion=%u, m_nFollowersCount=%u, m_nFansCount=%u, m_nFriendsCount=%u, m_nCreateTopicsCount=%u, "
+					"m_nJoinTopicsCount=%u",
+					m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nSelfInfoVersion,
+					m_nFollowersCount, m_nFansCount, m_nFriendsCount, m_nCreateTopicsCount, m_nJoinTopicsCount);
 			nOffset += nLen;
 		}
 
@@ -539,5 +626,37 @@ public:
 	}
 };
 
+#define MSGID_UPDATEDEVICETOKEN_REQ		28
+class CUpdateDeviceTokenReq : public IMsgBody
+{
+public:
+	CUpdateDeviceTokenReq()
+	{
+	}
+
+	string			m_strDeviceToken;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strDeviceToken);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		return nRet;
+	}
+
+	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
+	{
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_strDeviceToken=%s}", m_strDeviceToken.c_str());
+		nOffset += nLen;
+	}
+};
 
 #endif /* ACCOUNT_MSG_H_ */

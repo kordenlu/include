@@ -8,13 +8,24 @@
 #ifndef TYPEDEF_H_
 #define TYPEDEF_H_
 
+enum
+{
+	enmPhoneType_WindowsPhone	= 0x00,
+	enmPhoneType_Android		= 0x01,
+	enmPhoneType_IPhone			= 0x02,
+	enmPhoneType_Unknown		= 0xff,
+};
+
+
 struct ConnInfo
 {
 	ConnInfo()
 	{
 		m_nUin = 0;
+		m_nPhoneType = enmPhoneType_Unknown;
 	}
 	uint32_t			m_nUin;
+	uint8_t				m_nPhoneType;
 };
 
 enum
