@@ -27,7 +27,7 @@ public:
 	string				m_strSrcHeadImage;
 	string				m_strSrcNickName;
 	string				m_strChatMsg;
-	int64_t				m_nCurTime;
+	int32_t				m_nCurTime;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{

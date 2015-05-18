@@ -42,13 +42,15 @@ public:
 		m_nGateID = 0;
 		m_nTimeStamp = 0;
 		m_nPhoneType = 0;
+		m_nGateRedisAddress = 0;
+		m_nGateRedisPort = 0;
 	}
 
 	virtual int32_t GetSize()
 	{
 		return (sizeof(m_nTotalSize) + sizeof(m_nHeadSize) + sizeof(m_nControlCode) +
 				sizeof(m_nUin) + sizeof(m_nSessionID) + sizeof(m_nClientAddress) + sizeof(m_nClientPort) +
-				sizeof(m_nGateID) + sizeof(m_nTimeStamp) + sizeof(m_nPhoneType));
+				sizeof(m_nGateID) + sizeof(m_nTimeStamp) + sizeof(m_nPhoneType) + sizeof(m_nGateRedisAddress) + sizeof(m_nGateRedisPort));
 	}
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
@@ -63,6 +65,8 @@ public:
 		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nGateID);
 		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nTimeStamp);
 		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nPhoneType);
+		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nGateRedisAddress);
+		CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nGateRedisPort);
 
 		return 0;
 	}
@@ -79,6 +83,8 @@ public:
 		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nGateID);
 		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nTimeStamp);
 		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nPhoneType);
+		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nGateRedisAddress);
+		CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nGateRedisPort);
 
 		return 0;
 	}
@@ -86,9 +92,12 @@ public:
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
 		uint32_t nLen = sprintf(buf + offset, "controlhead={m_nTotalSize=%d, m_nHeadSize=%d, m_nControlCode=%d, m_nUin=%u, "
-				"m_nSessionID=%u, m_nClientAddress=%s, m_nClientPort=%d, m_nGateID=%d, m_nTimeStamp=%ld, m_nPhoneType=%d}", m_nTotalSize,
+				"m_nSessionID=%u, m_nClientAddress=%s, m_nClientPort=%d, m_nGateID=%d, m_nTimeStamp=%ld, m_nPhoneType=%d, ", m_nTotalSize,
 				m_nHeadSize, m_nControlCode, m_nUin, m_nSessionID, inet_ntoa_f(m_nClientAddress), m_nClientPort, m_nGateID, m_nTimeStamp,
 				m_nPhoneType);
+		offset += nLen;
+
+		nLen = sprintf(buf + offset, "m_nGateRedisAddress=%s, m_nGateRedisPort=%d}", inet_ntoa_f(m_nGateRedisAddress), m_nGateRedisPort);
 		offset += nLen;
 	}
 
@@ -100,8 +109,10 @@ public:
 	uint32_t			m_nClientAddress;
 	uint16_t			m_nClientPort;
 	uint16_t			m_nGateID;
-	int64_t			m_nTimeStamp;
+	int64_t				m_nTimeStamp;
 	uint8_t				m_nPhoneType;
+	uint32_t			m_nGateRedisAddress;
+	uint16_t			m_nGateRedisPort;
 };
 
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * account_msg.h
  *
  *  Created on: Mar 9, 2015
@@ -452,6 +452,12 @@ public:
 		m_nUin = 0;
 		m_nGender = 0;
 		m_nSelfInfoVersion = 0;
+		m_nFollowersCount = 0;
+		m_nFansCount = 0;
+		m_nFriendsCount = 0;
+		m_nLookMeCount = 0;
+		m_nCreateTopicsCount = 0;
+		m_nJoinTopicsCount = 0;
 	}
 
 	enum
@@ -473,6 +479,7 @@ public:
 	uint32_t		m_nFollowersCount;
 	uint32_t		m_nFansCount;
 	uint32_t		m_nFriendsCount;
+	uint32_t		m_nLookMeCount;
 	uint32_t		m_nCreateTopicsCount;
 	uint32_t		m_nJoinTopicsCount;
 
@@ -548,6 +555,12 @@ public:
 				return nRet;
 			}
 
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nLookMeCount);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
 			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nCreateTopicsCount);
 			if(nRet != 0)
 			{
@@ -581,10 +594,210 @@ public:
 		else
 		{
 			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s, "
-					"m_nSelfInfoVersion=%u, m_nFollowersCount=%u, m_nFansCount=%u, m_nFriendsCount=%u, m_nCreateTopicsCount=%u, "
-					"m_nJoinTopicsCount=%u",
+					"m_nSelfInfoVersion=%u, m_nFollowersCount=%u, m_nFansCount=%u, m_nFriendsCount=%u, m_nLookMeCount=%u"
+					"m_nCreateTopicsCount=%u, m_nJoinTopicsCount=%u",
 					m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nSelfInfoVersion,
-					m_nFollowersCount, m_nFansCount, m_nFriendsCount, m_nCreateTopicsCount, m_nJoinTopicsCount);
+					m_nFollowersCount, m_nFansCount, m_nFriendsCount, m_nLookMeCount, m_nCreateTopicsCount, m_nJoinTopicsCount);
+			nOffset += nLen;
+		}
+
+		nLen = sprintf(pBuf + nOffset, "}");
+		nOffset += nLen;
+	}
+};
+
+#define MSGID_RESETPASSWORD_REQ		13
+class CResetPasswordReq : public IMsgBody
+{
+public:
+	CResetPasswordReq()
+	{
+	}
+
+	string			m_strPhone;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhone);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+		return nRet;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strPhone=%s}", m_strPhone.c_str());
+		offset += nLen;
+	}
+};
+
+#define MSGID_RESETPASSWORD_RESP		14
+class CResetPasswordResp : public IMsgBody
+{
+public:
+	CResetPasswordResp()
+	{
+		m_nResult = 0;
+	}
+
+	enum
+	{
+		enmResult_OK				= 0x00,
+		enmResult_PhoneAuthLimit	= 0x01,
+		enmResult_AccountNotExist	= 0x02,
+		enmResult_Unknown			= 0xff,
+	};
+
+	uint8_t			m_nResult;
+	string			m_strTips;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+		if(m_nResult != 0)
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strTips);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+		return nRet;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
+	{
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_nResult=%d", m_nResult);
+		nOffset += nLen;
+
+		if(m_nResult != 0)
+		{
+			nLen = sprintf(pBuf + nOffset, ", m_strTips=%s", m_strTips.c_str());
+			nOffset += nLen;
+		}
+
+		nLen = sprintf(pBuf + nOffset, "}");
+		nOffset += nLen;
+	}
+};
+
+#define MSGID_VERIFYRESETPW_REQ		16
+class CVerifyResetPWReq : public IMsgBody
+{
+public:
+	CVerifyResetPWReq()
+	{
+		m_nAuthCode = 0;
+	}
+
+	string			m_strPhone;
+	string			m_strPassword;
+	int32_t			m_nAuthCode;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPhone);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strPassword);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nAuthCode);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		return nRet;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strPhone=%s, m_strPassword=%s, m_nAuthCode=%d}",
+				m_strPhone.c_str(), m_strPassword.c_str(), m_nAuthCode);
+		offset += nLen;
+	}
+};
+
+#define MSGID_VERIFYRESETPW_RESP		17
+class CVerifyResetPWResp : public IMsgBody
+{
+public:
+	CVerifyResetPWResp()
+	{
+		m_nResult = 0;
+	}
+
+	enum
+	{
+		enmResult_OK				= 0x00,
+		enmResult_AuthCodeWrong		= 0x01,
+		enmResult_AuthCodeExpire	= 0x02,
+		enmResult_Unknown			= 0xff,
+	};
+
+	uint8_t			m_nResult;
+	string			m_strTips;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		if(m_nResult != 0)
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strTips);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+		return nRet;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
+	{
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_nResult=%d", m_nResult);
+		nOffset += nLen;
+
+		if(m_nResult != 0)
+		{
+			nLen = sprintf(pBuf + nOffset, ", m_strTips=%s", m_strTips.c_str());
 			nOffset += nLen;
 		}
 
@@ -625,6 +838,107 @@ public:
 		nOffset += nLen;
 	}
 };
+
+#define MSGID_MODIFYPASSWORD_REQ		25
+class CModifyPasswordReq : public IMsgBody
+{
+public:
+	CModifyPasswordReq()
+	{
+	}
+
+	string			m_strCurPassword;
+	string			m_strNewPassword;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strCurPassword);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strNewPassword);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		return nRet;
+	}
+
+	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
+	{
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strCurPassword=%s, m_strNewPassword=%s}",
+				m_strCurPassword.c_str(), m_strNewPassword.c_str());
+		offset += nLen;
+	}
+};
+
+#define MSGID_MODIFYPASSWORD_RESP		26
+class CModifyPasswordResp : public IMsgBody
+{
+public:
+	CModifyPasswordResp()
+	{
+		m_nResult = 0;
+	}
+
+	enum
+	{
+		enmResult_OK				= 0x00,
+		enmResult_CurPasswordWrong	= 0x01,
+		enmResult_Unknown			= 0xff,
+	};
+
+	uint8_t			m_nResult;
+	string			m_strTips;
+
+	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		int32_t nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nResult);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
+		if(m_nResult != 0)
+		{
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strTips);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+		}
+		return nRet;
+	}
+
+	virtual int32_t Decode(const uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
+	{
+		return 0;
+	}
+
+	virtual void Dump(char* pBuf, const uint32_t nBufSize, uint32_t& nOffset)
+	{
+		uint32_t nLen = sprintf(pBuf + nOffset, ", msgbody={m_nResult=%d", m_nResult);
+		nOffset += nLen;
+
+		if(m_nResult != 0)
+		{
+			nLen = sprintf(pBuf + nOffset, ", m_strTips=%s", m_strTips.c_str());
+			nOffset += nLen;
+		}
+
+		nLen = sprintf(pBuf + nOffset, "}");
+		nOffset += nLen;
+	}
+};
+
 
 #define MSGID_UPDATEDEVICETOKEN_REQ		28
 class CUpdateDeviceTokenReq : public IMsgBody
