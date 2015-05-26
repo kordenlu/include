@@ -594,7 +594,7 @@ public:
 		else
 		{
 			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s, "
-					"m_nSelfInfoVersion=%u, m_nFollowersCount=%u, m_nFansCount=%u, m_nFriendsCount=%u, m_nLookMeCount=%u"
+					"m_nSelfInfoVersion=%u, m_nFollowersCount=%u, m_nFansCount=%u, m_nFriendsCount=%u, m_nLookMeCount=%u, "
 					"m_nCreateTopicsCount=%u, m_nJoinTopicsCount=%u",
 					m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nSelfInfoVersion,
 					m_nFollowersCount, m_nFansCount, m_nFriendsCount, m_nLookMeCount, m_nCreateTopicsCount, m_nJoinTopicsCount);
