@@ -19,13 +19,22 @@ using namespace FRAME;
 class CChatToOneReq : public IMsgBody
 {
 public:
+	enum
+	{
+		enmChatMsgType_Text		= 0x00,
+		enmChatMsgType_Bottle	= 0x01,
+		enmChatMsgType_Voice	= 0x02,
+		enmChatMsgType_Pic		= 0x03,
+	};
 	CChatToOneReq()
 	{
+		m_nChatMsgType = enmChatMsgType_Text;
 		m_nCurTime = 0;
 	}
 
 	string				m_strSrcHeadImage;
 	string				m_strSrcNickName;
+	uint8_t				m_nChatMsgType;
 	string				m_strChatMsg;
 	int32_t				m_nCurTime;
 
@@ -48,6 +57,12 @@ public:
 			return nRet;
 		}
 
+		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_nChatMsgType);
+		if(nRet != 0)
+		{
+			return nRet;
+		}
+
 		nRet = CCodeEngine::Decode(pBuf, nBufSize, nOffset, m_strChatMsg);
 		if(nRet != 0)
 		{
@@ -65,8 +80,9 @@ public:
 
 	virtual void Dump(char* buf, const uint32_t size, uint32_t& offset)
 	{
-		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strSrcHeadImage=%s, m_strSrcNickName=%s, m_strChatMsg=%s, m_nCurTime=%ld}",
-				m_strSrcHeadImage.c_str(), m_strSrcNickName.c_str(), m_strChatMsg.c_str(), m_nCurTime);
+		uint32_t nLen = sprintf(buf + offset, ", msgbody={m_strSrcHeadImage=%s, m_strSrcNickName=%s, m_nChatMsgType=%d, "
+				"m_strChatMsg=%s, m_nCurTime=%ld}",
+				m_strSrcHeadImage.c_str(), m_strSrcNickName.c_str(), m_nChatMsgType, m_strChatMsg.c_str(), m_nCurTime);
 		offset += nLen;
 	}
 };
