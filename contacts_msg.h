@@ -222,6 +222,7 @@ public:
 		m_nJoinTopicsCount = 0;
 		m_nCreateTime = 0;
 		m_nFollowBusLineCount = 0;
+		m_nRadar = 0;
 	}
 
 	uint8_t					m_nResult;
@@ -251,6 +252,7 @@ public:
 	string					m_strPhotoWall;
 	int32_t					m_nCreateTime;
 	uint8_t					m_nFollowBusLineCount;
+	uint8_t					m_nRadar;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -411,6 +413,12 @@ public:
 			{
 				return nRet;
 			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nRadar);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
 		}
 		else
 		{
@@ -455,12 +463,12 @@ public:
 					"m_strOneselfWords=%s, m_nGender=%d, m_strSchool=%s, m_strHometown=%s, "
 					"m_strBirthday=%s, m_nAge=%d, m_strLivePlace=%s, m_strHeight=%s, m_strWeight=%s, m_strJob=%s, m_nFollowersCount=%u, "
 					"m_nFansCount=%u, m_nFriendsCount=%u, m_nLookMeCount=%u, m_nCreateTopicsCount=%u, m_nJoinTopicsCount=%u, m_strPhotoWall=%s, "
-					"m_nCreateTime=%d, m_nFollowBusLineCount=%d",
+					"m_nCreateTime=%d, m_nFollowBusLineCount=%d, m_nRadar=%d",
 					m_nVersion, m_nIsFollow, m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_strHeadImage.c_str(), m_strOneselfWords.c_str(),
 					m_nGender, m_strSchool.c_str(), m_strHometown.c_str(), m_strBirthday.c_str(),
 					m_nAge, m_strLivePlace.c_str(), m_strHeight.c_str(), m_strWeight.c_str(), m_strJob.c_str(), m_nFollowersCount,
 					m_nFansCount, m_nFriendsCount, m_nLookMeCount, m_nCreateTopicsCount, m_nJoinTopicsCount, m_strPhotoWall.c_str(),
-					m_nCreateTime, m_nFollowBusLineCount);
+					m_nCreateTime, m_nFollowBusLineCount, m_nRadar);
 			offset += nLen;
 		}
 		else

@@ -23,9 +23,11 @@ struct ConnInfo
 	{
 		m_nUin = 0;
 		m_nPhoneType = enmPhoneType_Unknown;
+		m_nLastRecvTime = 0;
 	}
 	uint32_t			m_nUin;
 	uint8_t				m_nPhoneType;
+	int64_t				m_nLastRecvTime;
 };
 
 enum
