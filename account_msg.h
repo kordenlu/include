@@ -189,6 +189,7 @@ public:
 	{
 		m_nResult = 0;
 		m_nUin = 0;
+		m_nServerTime = 0;
 	}
 
 	enum
@@ -205,6 +206,8 @@ public:
 	string			m_strAccountID;
 	string			m_strTokenKey;
 	string			m_strDataKey;
+	string			m_strRC4Key;
+	uint32_t		m_nServerTime;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -247,6 +250,18 @@ public:
 			{
 				return nRet;
 			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strRC4Key);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nServerTime);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
 		}
 		return nRet;
 	}
@@ -268,8 +283,9 @@ public:
 		}
 		else
 		{
-			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s, m_strTokenKey=%s, m_strDataKey=%s",
-					m_nUin, m_strAccountID.c_str(), m_strTokenKey.c_str(), m_strDataKey.c_str());
+			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s, m_strTokenKey=%s, m_strDataKey=%s, m_strRC4Key=%s, "
+					"m_nServerTime=%u",
+					m_nUin, m_strAccountID.c_str(), m_strTokenKey.c_str(), m_strDataKey.c_str(), m_strRC4Key.c_str(), m_nServerTime);
 			nOffset += nLen;
 		}
 
@@ -474,6 +490,7 @@ public:
 		m_nCreateTopicsCount = 0;
 		m_nJoinTopicsCount = 0;
 		m_nFollowBuslineCount = 0;
+		m_nServerTime = 0;
 	}
 
 	enum
@@ -501,6 +518,8 @@ public:
 	string			m_strTokenKey;
 	string			m_strDataKey;
 	uint8_t			m_nFollowBuslineCount;
+	string			m_strRC4Key;
+	uint32_t		m_nServerTime;
 
 	virtual int32_t Encode(uint8_t *pBuf, const int32_t nBufSize, uint32_t &nOffset)
 	{
@@ -609,6 +628,18 @@ public:
 			{
 				return nRet;
 			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_strRC4Key);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
+
+			nRet = CCodeEngine::Encode(pBuf, nBufSize, nOffset, m_nServerTime);
+			if(nRet != 0)
+			{
+				return nRet;
+			}
 		}
 		return nRet;
 	}
@@ -632,10 +663,11 @@ public:
 		{
 			nLen = sprintf(pBuf + nOffset, ", m_nUin=%u, m_strAccountID=%s, m_strNickName=%s, m_nGender=%d, m_strHeadImageAddr=%s, "
 					"m_nSelfInfoVersion=%u, m_nFollowersCount=%u, m_nFansCount=%u, m_nFriendsCount=%u, m_nLookMeCount=%u, "
-					"m_nCreateTopicsCount=%u, m_nJoinTopicsCount=%u, m_strTokenKey=%s, m_strDataKey=%s, m_nFollowBuslineCount=%d",
+					"m_nCreateTopicsCount=%u, m_nJoinTopicsCount=%u, m_strTokenKey=%s, m_strDataKey=%s, m_nFollowBuslineCount=%d, "
+					"m_strRC4Key=%s, m_nServerTime=%u",
 					m_nUin, m_strAccountID.c_str(), m_strNickName.c_str(), m_nGender, m_strHeadImageAddr.c_str(), m_nSelfInfoVersion,
 					m_nFollowersCount, m_nFansCount, m_nFriendsCount, m_nLookMeCount, m_nCreateTopicsCount, m_nJoinTopicsCount,
-					m_strTokenKey.c_str(), m_strDataKey.c_str(), m_nFollowBuslineCount);
+					m_strTokenKey.c_str(), m_strDataKey.c_str(), m_nFollowBuslineCount, m_strRC4Key.c_str(), m_nServerTime);
 			nOffset += nLen;
 		}
 
