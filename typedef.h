@@ -35,6 +35,15 @@ enum
 	enmMaxInternetAddrLen		= 128,
 };
 
+typedef uint32_t		AccountType;
+enum
+{
+	enmAccountType_Normal			= 0x00000000,
+	enmAccountType_Offical			= 0x00000001,
+	enmAccountType_ShopOwner		= 0x00000002,
+};
+
+
 #define MAX_MSG_SIZE		(64 * 1024 - 1)
 #define MAX_CTLHEAD_SIZE	(255)
 
